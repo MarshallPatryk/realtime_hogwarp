@@ -1,6 +1,6 @@
-# tcs_weather
+# realtime_hogwarp
 HogWarp - Weather and time sync system
 
-Drop the folder directly into the mods folder of your server. A configuration file is available.
+Drop the folder directly into the Mods folder of your server. A configuration file is available.
 
-Discord : Kruksi#0001
+forked from Kruksii/tcs_weather
