@@ -1,13 +1,6 @@
 Config = {}
 
--- The date and time on the boot of the server
-Config.timeHour = 12
-Config.timeMinute = 00
-Config.dateDay = 1
-Config.dateMonth = 1
-
 Config.timeBeforeSync = 30 -- Interval between sync (sec)
-Config.timePassedEverySync = 5 -- Ingame-time passed every sync (min)
 Config.timeBeforeRndmWeather = 1200 -- Interval between random weather (sec)
 
 -- Winter weather allowed on the server
