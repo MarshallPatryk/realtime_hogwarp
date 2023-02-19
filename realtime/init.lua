@@ -14,7 +14,7 @@ local weatherName = "Clear"
 
 registerForEvent("init", function()
     print("Real Time script made by SamWieszKto (forked from Kruksii)")
-	syncWeatherAndTime()
+    syncWeatherAndTime()
     rndmWeather()
 end)
 
@@ -34,25 +34,28 @@ registerForEvent("update", function(delta)
 end)
 
 function syncWeatherAndTime()
-	time = os.date('*t')
+    time = os.date('*t')
     timeHour = time.hour
-	timeMinute = time.min
-	dateDay = time.day
-	dateMonth = time.month
-	
-	if (dateMonth == 12 and dateDay >= 21) or dateMonth == 1 or dateMonth == 2 or (dateMonth == 3 and dateDay < 21) then
+    timeMinute = time.min
+    dateDay = time.day
+    dateMonth = time.month
+
+    if (dateMonth == 12 and dateDay >= 21) or dateMonth == 1 or dateMonth == 2 or
+        (dateMonth == 3 and dateDay < 21) then
         -- winter
-		weatherSeason = 2
-	elseif (dateMonth == 3 and dateDay >= 21) or dateMonth == 4 or dateMonth == 5 or (dateMonth == 6 and dateDay < 21) then
+        weatherSeason = 2
+    elseif (dateMonth == 3 and dateDay >= 21) or dateMonth == 4 or dateMonth ==
+        5 or (dateMonth == 6 and dateDay < 21) then
         -- spring
-		weatherSeason = 4
-	elseif (dateMonth == 6 and dateDay >= 21) or dateMonth == 7 or dateMonth == 8 or (dateMonth == 9 and dateDay < 23) then
+        weatherSeason = 4
+    elseif (dateMonth == 6 and dateDay >= 21) or dateMonth == 7 or dateMonth ==
+        8 or (dateMonth == 9 and dateDay < 23) then
         -- summer
-		weatherSeason = 1
-	else
+        weatherSeason = 1
+    else
         -- fall
-		weatherSeason = 3
-	end
+        weatherSeason = 3
+    end
 
     world.hour = timeHour
     world.minute = timeMinute
@@ -61,7 +64,8 @@ function syncWeatherAndTime()
     world.season = weatherSeason
     world.weather = weatherName
     world:RpcSet()
-    print("syncTime: " ..timeHour.."H "..timeMinute.."m - "..dateDay.."D "..dateMonth.."M - Season's number:"..weatherSeason)
+    print("syncTime: " .. timeHour .. "H " .. timeMinute .. "m - " .. dateDay ..
+              "D " .. dateMonth .. "M - Season's number:" .. weatherSeason)
 end
 
 function rndmWeather()
@@ -85,5 +89,5 @@ function rndmWeather()
 
     world.weather = weatherName
     world:RpcSet()
-    print("Changing weather for "..weatherName)
+    print("Changing weather for " .. weatherName)
 end
