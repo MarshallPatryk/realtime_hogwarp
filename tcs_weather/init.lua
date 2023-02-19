@@ -2,16 +2,20 @@ require("config")
 
 local syncTime = 0
 local randomWeather = 0
-local timeHour = Config.timeHour
-local timeMinute = Config.timeMinute
-local dateDay = Config.dateDay
-local dateMonth = Config.dateMonth
+
+local time = os.date('*t')
+local timeHour = time.hour
+local timeMinute = time.min
+local dateDay = time.day
+local dateMonth = time.month
+
 local weatherSeason = 0
 local weatherName = nil
 
 registerForEvent("init", function()
-    rndmWeather()
-    syncWeather()
+    print("Real Time script made by SamWieszKto (forked from Kruksii)")
+	rndmWeather()
+    syncWeatherAndTime()
 end)
 
 registerForEvent("update", function(delta)
@@ -20,7 +24,7 @@ registerForEvent("update", function(delta)
 
     if syncTime > Config.timeBeforeSync then
         syncTime = 0
-        syncWeather()
+        syncWeatherAndTime()
     end
 
     if randomWeather > Config.timeBeforeRndmWeather then
@@ -29,40 +33,26 @@ registerForEvent("update", function(delta)
     end
 end)
 
-function syncWeather()
-    timeMinute = timeMinute + Config.timePassedEverySync
-
-    if timeMinute > 59 then
-        timeMinute = 0
-        timeHour = timeHour + 1
-    end
-
-    if timeHour > 23 then
-        timeHour = 0
-        dateDay = dateDay + 1
-    end
-
-    if dateDay > 30 then
-        dateDay = 1
-        dateMonth = dateMonth + 1
-        if dateMonth > 12 then
-            dateMonth = 1
-        end
-    end
-
-    if dateMonth == 12 or dateMonth == 1 or dateMonth == 2 then
-        -- hiver
-        weatherSeason = 2
-    elseif dateMonth == 3 or dateMonth == 4 or dateMonth == 5 then
-        -- printemps
-        weatherSeason = 4
-    elseif dateMonth == 6 or dateDay == 7 or dateMonth == 8 then
-        -- été  
-        weatherSeason = 1
-    elseif dateMonth == 9 or dateMonth == 10 or dateMonth == 11 then
-        -- automne
-        weatherSeason = 3
-    end
+function syncWeatherAndTime()
+	time = os.date('*t')
+    timeHour = time.hour
+	timeMinute = time.min
+	dateDay = time.day
+	dateMonth = time.month
+	
+	if (dateMonth == 12 and dateDay >= 21) or dateMonth == 1 or dateMonth == 2 or (dateMonth == 3 and dateDay < 21) then
+        -- winter
+		weatherSeason = 2
+	elseif (dateMonth == 3 and dateDay >= 21) or dateMonth == 4 or dateMonth == 5 or (dateMonth == 6 and dateDay < 21) then
+        -- spring
+		weatherSeason = 4
+	elseif (dateMonth == 6 and dateDay >= 21) or dateMonth == 7 or dateMonth == 8 or (dateMonth == 9 and dateDay < 23) then
+        -- summer
+		weatherSeason = 1
+	else
+        -- fall
+		weatherSeason = 3
+	end
 
     world.hour = timeHour
     world.minute = timeMinute
@@ -71,24 +61,24 @@ function syncWeather()
     world.season = weatherSeason
     world.weather = weatherName
     world:RpcSet()
-    print("syncTime: " ..timeHour.."H"..timeMinute.." - "..dateDay.."."..dateMonth)
+    print("syncTime: " ..timeHour.."H "..timeMinute.."m - "..dateDay.."D "..dateMonth.."M - Season's number:"..weatherSeason)
 end
 
 function rndmWeather()
-    if dateMonth == 12 or dateMonth == 1 or dateMonth == 2 then
-        -- hiver
+    if world.season == 2 then
+        -- winter
         local weatherRndm = math.random(1, #Config.winterWeather)
         weatherName = Config.winterWeather[weatherRndm]
-    elseif dateMonth == 3 or dateMonth == 4 or dateMonth == 5 then
-        -- printemps
+    elseif world.season == 4 then
+        -- spring
         local weatherRndm = math.random(1, #Config.springWeather)
         weatherName = Config.springWeather[weatherRndm]
-    elseif dateMonth == 6 or dateDay == 7 or dateMonth == 8 then
-        -- été
+    elseif world.season == 1 then
+        -- summer
         local weatherRndm = math.random(1, #Config.summerWeather)
         weatherName = Config.summerWeather[weatherRndm]
-    elseif dateMonth == 9 or dateMonth == 10 or dateMonth == 11 then
-        -- automne
+    else
+        -- fall
         local weatherRndm = math.random(1, #Config.fallWeather)
         weatherName = Config.fallWeather[weatherRndm]
     end
