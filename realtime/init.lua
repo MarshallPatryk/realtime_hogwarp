@@ -10,12 +10,12 @@ local dateDay = time.day
 local dateMonth = time.month
 
 local weatherSeason = 0
-local weatherName = nil
+local weatherName = "Clear"
 
 registerForEvent("init", function()
     print("Real Time script made by SamWieszKto (forked from Kruksii)")
-	rndmWeather()
-    syncWeatherAndTime()
+	syncWeatherAndTime()
+    rndmWeather()
 end)
 
 registerForEvent("update", function(delta)
